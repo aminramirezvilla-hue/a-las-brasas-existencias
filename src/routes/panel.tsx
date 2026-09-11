@@ -13,7 +13,7 @@ import { getRun, useInventory } from "@/lib/store";
 
 export const Route = createFileRoute("/panel")({ component: PanelPage });
 
-function PanelPage() {
+export function PanelPage() {
   const restaurant = useInventory((s) => s.restaurant);
   const ingredients = useInventory((s) => s.ingredients);
   const checklists = useInventory((s) => s.checklists);

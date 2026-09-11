@@ -1,4 +1,4 @@
-import { StrictMode } from "react";
+import { StrictMode, Suspense, lazy, type ComponentType } from "react";
 import { createRoot } from "react-dom/client";
 import {
   Outlet,
@@ -11,21 +11,30 @@ import {
 import { HydrateGate } from "@/components/hydrate";
 import { AppErrorComponent } from "@/lib/error-component";
 import { Toaster } from "sonner";
-import { Route as IndexRoute } from "@/routes/index";
-import { Route as CartaRoute } from "@/routes/carta";
-import { Route as ChecklistRoute } from "@/routes/checklist";
-import { Route as ConteoRoute } from "@/routes/conteo";
-import { Route as ExpedienteRoute } from "@/routes/expediente";
-import { Route as InventarioRoute } from "@/routes/inventario";
-import { Route as KardexRoute } from "@/routes/kardex";
-import { Route as PanelRoute } from "@/routes/panel";
-import { Route as RecetasRoute } from "@/routes/recetas";
-import { Route as SetupRoute } from "@/routes/setup";
+import { InventarioPage } from "@/routes/inventario";
 import "@/styles.css";
+
+const ProposalPage = lazy(() => import("@/routes/index").then((m) => ({ default: m.Proposal })));
+const CartaPage = lazy(() => import("@/routes/carta").then((m) => ({ default: m.CartaPage })));
+const ChecklistPage = lazy(() => import("@/routes/checklist").then((m) => ({ default: m.ChecklistPage })));
+const ConteoPage = lazy(() => import("@/routes/conteo").then((m) => ({ default: m.ConteoPage })));
+const ExpedientePage = lazy(() => import("@/routes/expediente").then((m) => ({ default: m.ExpedientePage })));
+const KardexPage = lazy(() => import("@/routes/kardex").then((m) => ({ default: m.KardexPage })));
+const PanelPage = lazy(() => import("@/routes/panel").then((m) => ({ default: m.PanelPage })));
+const RecetasPage = lazy(() => import("@/routes/recetas").then((m) => ({ default: m.RecetasPage })));
+const SetupPage = lazy(() => import("@/routes/setup").then((m) => ({ default: m.SetupPage })));
+
+function Boot() {
+  return (
+    <p className="bg-bg p-8 text-[11px] uppercase tracking-[0.22em] text-muted">
+      A las Brasas · existencias
+    </p>
+  );
+}
 
 const rootRoute = createRootRoute({
   component: () => (
-    <>
+    <Suspense fallback={<Boot />}>
       <HydrateGate>
         <Outlet />
       </HydrateGate>
@@ -34,39 +43,37 @@ const rootRoute = createRootRoute({
         position="top-right"
         toastOptions={{ className: "bg-card text-fg border-border" }}
       />
-    </>
+    </Suspense>
   ),
 });
 
-function page(path: string, component: unknown) {
-  if (!component) throw new Error(`Falta componente para ${path}`);
+function page(path: string, component: ComponentType) {
   return createRoute({
     getParentRoute: () => rootRoute,
     path,
-    component: component as typeof rootRoute.options.component,
+    component,
   });
 }
 
-const inventario = InventarioRoute.options.component;
-
 const routeTree = rootRoute.addChildren([
-  page("/", inventario),
-  page("/inventario", inventario),
-  page("/propuesta", IndexRoute.options.component),
-  page("/carta", CartaRoute.options.component),
-  page("/checklist", ChecklistRoute.options.component),
-  page("/conteo", ConteoRoute.options.component),
-  page("/expediente", ExpedienteRoute.options.component),
-  page("/kardex", KardexRoute.options.component),
-  page("/panel", PanelRoute.options.component),
-  page("/recetas", RecetasRoute.options.component),
-  page("/setup", SetupRoute.options.component),
+  page("/", InventarioPage),
+  page("/inventario", InventarioPage),
+  page("/propuesta", ProposalPage),
+  page("/carta", CartaPage),
+  page("/checklist", ChecklistPage),
+  page("/conteo", ConteoPage),
+  page("/expediente", ExpedientePage),
+  page("/kardex", KardexPage),
+  page("/panel", PanelPage),
+  page("/recetas", RecetasPage),
+  page("/setup", SetupPage),
 ]);
 
 const router = createRouter({
   routeTree,
   history: createHashHistory(),
   defaultErrorComponent: AppErrorComponent,
+  defaultPreload: "intent",
 });
 
 createRoot(document.getElementById("root")!).render(

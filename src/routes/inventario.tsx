@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Search } from "lucide-react";
-import { useMemo, useState } from "react";
+import { memo, useMemo, useState } from "react";
 import { AppShell } from "@/components/shell";
 import { StatusToggle } from "@/components/status-toggle";
 import { Badge } from "@/components/ui/badge";
@@ -18,10 +18,8 @@ export const Route = createFileRoute("/inventario")({ component: InventarioPage 
 
 type Filter = "all" | StockStatus;
 
-function InventarioPage() {
+export function InventarioPage() {
   const ingredients = useInventory((s) => s.ingredients);
-  const setStatus = useInventory((s) => s.setStatus);
-  const setQty = useInventory((s) => s.setQty);
   const markCategory = useInventory((s) => s.markCategory);
   const [q, setQ] = useState("");
   const [cat, setCat] = useState<Category | "all">("all");
@@ -30,12 +28,12 @@ function InventarioPage() {
   const stats = existenceStats(ingredients);
 
   const rows = useMemo(() => {
+    const query = q.trim().toLowerCase();
     return ingredients.filter((i) => {
       if (cat !== "all" && i.category !== cat) return false;
       if (filter !== "all" && i.status !== filter) return false;
-      if (!q) return true;
-      const hay = `${i.name} ${i.sku} ${i.unitLabel}`.toLowerCase();
-      return hay.includes(q.toLowerCase());
+      if (!query) return true;
+      return `${i.name} ${i.sku} ${i.unitLabel}`.toLowerCase().includes(query);
     });
   }, [ingredients, q, cat, filter]);
 
@@ -51,6 +49,11 @@ function InventarioPage() {
       items: map.get(c.id) ?? [],
     }));
   }, [rows]);
+
+  const faltantes = useMemo(
+    () => (stats.falta > 0 && filter === "all" && !q ? ingredients.filter((i) => i.status === "falta") : []),
+    [ingredients, stats.falta, filter, q],
+  );
 
   return (
     <AppShell>
@@ -93,18 +96,16 @@ function InventarioPage() {
         </NativeSelect>
       </div>
 
-      {stats.falta > 0 && filter === "all" && !q ? (
+      {faltantes.length > 0 ? (
         <Card className="mt-4 border-0 bg-crit/10 p-4">
           <p className="text-[11px] uppercase tracking-[0.16em] text-crit">Pedir ahora</p>
           <ul className="mt-2 space-y-1 text-sm">
-            {ingredients
-              .filter((i) => i.status === "falta")
-              .map((i) => (
-                <li key={i.id} className="flex items-center justify-between gap-2">
-                  <span className="text-fg">{i.name}</span>
-                  <span className="text-[11px] text-muted">{i.unitLabel}</span>
-                </li>
-              ))}
+            {faltantes.map((i) => (
+              <li key={i.id} className="flex items-center justify-between gap-2">
+                <span className="text-fg">{i.name}</span>
+                <span className="text-[11px] text-muted">{i.unitLabel}</span>
+              </li>
+            ))}
           </ul>
         </Card>
       ) : null}
@@ -128,12 +129,7 @@ function InventarioPage() {
               </div>
               <div className="space-y-2">
                 {group.items.map((ing) => (
-                  <IngredientRow
-                    key={ing.id}
-                    ing={ing}
-                    onStatus={(s) => setStatus(ing.id, s)}
-                    onQty={(n) => setQty(ing.id, n)}
-                  />
+                  <IngredientRow key={ing.id} ing={ing} />
                 ))}
               </div>
             </section>
@@ -144,17 +140,11 @@ function InventarioPage() {
   );
 }
 
-function IngredientRow({
-  ing,
-  onStatus,
-  onQty,
-}: {
-  ing: Ingredient;
-  onStatus: (s: StockStatus) => void;
-  onQty: (n: number) => void;
-}) {
+const IngredientRow = memo(function IngredientRow({ ing }: { ing: Ingredient }) {
+  const setStatus = useInventory((s) => s.setStatus);
+  const setQty = useInventory((s) => s.setQty);
   return (
-    <Card className="p-3 sm:p-4">
+    <Card className="p-3 [content-visibility:auto] [contain-intrinsic-size:auto_9.5rem] sm:p-4">
       <div className="flex flex-wrap items-start justify-between gap-2">
         <div className="min-w-0">
           <p className="text-sm font-medium text-fg">{ing.name}</p>
@@ -170,7 +160,7 @@ function IngredientRow({
         </Badge>
       </div>
       <div className="mt-3">
-        <StatusToggle value={ing.status} onChange={onStatus} />
+        <StatusToggle value={ing.status} onChange={(s) => setStatus(ing.id, s)} />
       </div>
       <div className="mt-3 flex items-center gap-2">
         <label className="text-[11px] uppercase tracking-wide text-subtle" htmlFor={`qty-${ing.id}`}>
@@ -184,13 +174,13 @@ function IngredientRow({
           inputMode="decimal"
           className="h-11 max-w-32 tabular"
           value={qty(ing.stock)}
-          onChange={(e) => onQty(Number(e.target.value))}
+          onChange={(e) => setQty(ing.id, Number(e.target.value))}
         />
         <span className="text-xs text-muted">{ing.unitLabel}</span>
       </div>
     </Card>
   );
-}
+});
 
 function StatChip({
   label,

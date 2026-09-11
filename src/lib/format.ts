@@ -1,5 +1,3 @@
-import { format } from "date-fns";
-import { es } from "date-fns/locale";
 import type { Unit } from "./types";
 
 const mxn = new Intl.NumberFormat("es-MX", {
@@ -13,6 +11,24 @@ const mxnDec = new Intl.NumberFormat("es-MX", {
   currency: "MXN",
   minimumFractionDigits: 2,
   maximumFractionDigits: 2,
+});
+
+const prettyDateDay = new Intl.DateTimeFormat("es-MX", {
+  day: "numeric",
+  month: "short",
+  year: "numeric",
+});
+
+const prettyDateTime = new Intl.DateTimeFormat("es-MX", {
+  hour: "2-digit",
+  minute: "2-digit",
+  hour12: false,
+});
+
+const prettyDayFmt = new Intl.DateTimeFormat("es-MX", {
+  weekday: "long",
+  day: "numeric",
+  month: "long",
 });
 
 export function money(n: number, decimals = false) {
@@ -35,19 +51,22 @@ export function pct(n: number) {
 }
 
 export function dayKey(d = new Date()) {
-  return format(d, "yyyy-MM-dd");
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
 }
 
 export function prettyDate(iso: string) {
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return iso;
-  return format(d, "d MMM yyyy · HH:mm", { locale: es });
+  return `${prettyDateDay.format(d)} · ${prettyDateTime.format(d)}`;
 }
 
 export function prettyDay(iso: string) {
   const d = iso.length <= 10 ? new Date(`${iso}T12:00:00`) : new Date(iso);
   if (Number.isNaN(d.getTime())) return iso;
-  return format(d, "EEEE d 'de' MMMM", { locale: es });
+  return prettyDayFmt.format(d);
 }
 
 export function uid(prefix: string) {

@@ -356,7 +356,6 @@ export const useInventory = create<InventoryState & Actions>()(
       partialize: (s) => ({
         restaurant: s.restaurant,
         ingredients: s.ingredients,
-        recipes: s.recipes,
         movements: s.movements,
         checklists: s.checklists,
         incidents: s.incidents,

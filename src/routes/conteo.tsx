@@ -14,7 +14,7 @@ import type { Category } from "@/lib/types";
 
 export const Route = createFileRoute("/conteo")({ component: ConteoPage });
 
-function ConteoPage() {
+export function ConteoPage() {
   const ingredients = useInventory((s) => s.ingredients);
   const applyCount = useInventory((s) => s.applyCount);
   const encargado = useInventory((s) => s.restaurant.encargado);

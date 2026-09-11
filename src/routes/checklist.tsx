@@ -17,7 +17,7 @@ export const Route = createFileRoute("/checklist")({ component: ChecklistPage })
 
 const SECTIONS: ChecklistSectionId[] = ["apertura", "servicio", "cierre"];
 
-function ChecklistPage() {
+export function ChecklistPage() {
   const ingredients = useInventory((s) => s.ingredients);
   const checklists = useInventory((s) => s.checklists);
   const turno = useInventory((s) => s.restaurant.turno);

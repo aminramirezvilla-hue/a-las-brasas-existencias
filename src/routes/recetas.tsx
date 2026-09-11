@@ -30,7 +30,7 @@ const KINDS: { id: RecipeKind | "all"; label: string }[] = [
   { id: "postre", label: "Postres" },
 ];
 
-function RecetasPage() {
+export function RecetasPage() {
   const recipes = useInventory((s) => s.recipes);
   const ingredients = useInventory((s) => s.ingredients);
   const sellRecipe = useInventory((s) => s.sellRecipe);

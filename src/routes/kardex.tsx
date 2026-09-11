@@ -18,7 +18,7 @@ const TONES: Record<MovementType, "ok" | "warn" | "crit" | "ember" | "muted"> = 
   conteo: "muted",
 };
 
-function KardexPage() {
+export function KardexPage() {
   const movements = useInventory((s) => s.movements);
   const ingredients = useInventory((s) => s.ingredients);
   const [type, setType] = useState<MovementType | "all">("all");

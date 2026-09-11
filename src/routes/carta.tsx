@@ -14,7 +14,7 @@ import { money } from "@/lib/format";
 
 export const Route = createFileRoute("/carta")({ component: CartaPage });
 
-function CartaPage() {
+export function CartaPage() {
   return (
     <div className="min-h-dvh bg-paper text-ink">
       <header className="sticky top-0 z-30 border-b border-ink/10 bg-paper/95 backdrop-blur-md">

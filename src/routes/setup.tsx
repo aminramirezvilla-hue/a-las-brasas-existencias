@@ -11,7 +11,7 @@ import type { Turno } from "@/lib/types";
 
 export const Route = createFileRoute("/setup")({ component: SetupPage });
 
-function SetupPage() {
+export function SetupPage() {
   const restaurant = useInventory((s) => s.restaurant);
   const setRestaurant = useInventory((s) => s.setRestaurant);
   const markSetup = useInventory((s) => s.markSetup);

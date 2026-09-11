@@ -42,7 +42,7 @@ const INSUMOS = [
   { t: "Barra, empaque y limpieza", d: "Cervezas, refresco, contenedores, vasos, servilletas, cloro y Mr. Músculo." },
 ];
 
-function Proposal() {
+export function Proposal() {
   return (
     <div className="bg-bg text-fg">
       <header className="sticky top-0 z-20 border-b border-border/60 bg-bg/85 backdrop-blur-md">
@@ -71,6 +71,10 @@ function Proposal() {
         <img
           src={asset("brand/menu-ribs.jpg")}
           alt="Costillas back rib de A las Brasas"
+          width={533}
+          height={800}
+          decoding="async"
+          fetchPriority="high"
           className="absolute inset-0 size-full object-cover object-top outline outline-1 -outline-offset-1 outline-white/10"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-bg via-bg/85 to-bg/40" />
