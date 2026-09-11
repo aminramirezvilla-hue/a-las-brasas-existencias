@@ -1,0 +1,125 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@theme {
+  --font-sans: "Barlow", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Oswald", ui-sans-serif, system-ui, sans-serif;
+
+  --color-bg: #0c0b0a;
+  --color-surface: #141210;
+  --color-card: #1a1714;
+  --color-raised: #221c18;
+  --color-fg: #f4efe6;
+  --color-muted: #9a9388;
+  --color-subtle: #6f6a63;
+  --color-ember: #c41e1e;
+  --color-ember-fg: #fff7f2;
+  --color-bone: #f4efe6;
+  --color-border: #2c2824;
+  --color-ok: #4a8a68;
+  --color-warn: #c47a2a;
+  --color-crit: #c43a32;
+  --color-ring: #c41e1e;
+  --color-flame: #f5c518;
+  --color-paper: #f3ede1;
+  --color-ink: #1a1410;
+  --color-banner: #b42318;
+
+  --color-background: #0c0b0a;
+  --color-foreground: #f4efe6;
+  --color-primary: #c41e1e;
+  --color-primary-foreground: #fff7f2;
+  --color-secondary: #221c18;
+  --color-secondary-foreground: #f4efe6;
+  --color-destructive: #c43a32;
+  --color-input: #2c2824;
+  --color-accent: #221c18;
+  --color-accent-foreground: #f4efe6;
+
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 26px;
+  --radius-2xl: 32px;
+
+  --shadow-border: 0 0 0 1px rgb(255 255 255 / 0.08);
+  --shadow-border-hover: 0 0 0 1px rgb(255 255 255 / 0.14);
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background: var(--color-bg);
+    color: var(--color-fg);
+  }
+
+  body {
+    background: var(--color-bg);
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+    min-height: 100dvh;
+  }
+
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
+  h1, h2, h3 {
+    text-wrap: balance;
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  * {
+    border-color: var(--color-border);
+  }
+
+  input, select, textarea {
+    font: inherit;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+.ring-progress {
+  transform: rotate(-90deg);
+}
+
+.banner-stroke {
+  display: inline-block;
+  background: var(--color-banner);
+  color: #fff;
+  padding: 0.2rem 0.9rem 0.28rem;
+  transform: rotate(-1.1deg);
+  clip-path: polygon(1.5% 12%, 100% 0%, 98.5% 88%, 0% 100%);
+  font-family: var(--font-display);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+@media print {
+  nav, .no-print {
+    display: none !important;
+  }
+  body {
+    background: white;
+    color: #1a1714;
+  }
+}

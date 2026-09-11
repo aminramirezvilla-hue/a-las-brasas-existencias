@@ -1,0 +1,11 @@
+node_modules/
+.DS_Store
+*.log
+.output/
+.nitro/
+.vinxi/
+dist/
+.grok/
+screenshots/
+attachments/
+artifacts/
