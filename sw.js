@@ -1,49 +1,41 @@
-/* A las Brasas — cache de la PWA de existencias */
-const CACHE = "brasas-existencias-v1";
+const CACHE = "brasas-existencias-v2";
 
 self.addEventListener("install", (event) => {
-  self.skipWaiting();
-  event.waitUntil(
-    caches.open(CACHE).then((cache) => {
-      const base = self.location.pathname.replace(/sw\.js$/, "");
-      return cache.addAll([
-        base,
-        `${base}index.html`,
-        `${base}manifest.webmanifest`,
-        `${base}favicon.svg`,
-        `${base}logo-brasas.jpg`,
-        `${base}apple-touch-icon.png`,
-        `${base}icon-192.png`,
-        `${base}icon-512.png`,
-      ]);
-    }),
-  );
+  event.waitUntil(self.skipWaiting());
 });
 
 self.addEventListener("activate", (event) => {
   event.waitUntil(
     caches
       .keys()
-      .then((keys) => Promise.all(keys.filter((key) => key !== CACHE).map((key) => caches.delete(key))))
+      .then((keys) => Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k))))
       .then(() => self.clients.claim()),
   );
 });
 
 self.addEventListener("fetch", (event) => {
-  if (event.request.method !== "GET") return;
+  const req = event.request;
+  if (req.method !== "GET") return;
+
   event.respondWith(
     caches.open(CACHE).then(async (cache) => {
-      const cached = await cache.match(event.request);
+      const cached = await cache.match(req);
       if (cached) return cached;
       try {
-        const response = await fetch(event.request);
-        if (response.ok && new URL(event.request.url).origin === self.location.origin) {
-          cache.put(event.request, response.clone());
+        const res = await fetch(req);
+        const url = new URL(req.url);
+        if (res.ok && url.origin === self.location.origin) {
+          cache.put(req, res.clone());
         }
-        return response;
+        return res;
       } catch {
-        const base = self.location.pathname.replace(/sw\.js$/, "");
-        return (await cache.match(`${base}index.html`)) || (await cache.match(base)) || Response.error();
+        const fallback =
+          (await cache.match("./index.html")) ||
+          (await cache.match("./")) ||
+          (await cache.match("/a-las-brasas-existencias/")) ||
+          (await cache.match("/a-las-brasas-existencias/index.html"));
+        if (fallback) return fallback;
+        throw new Error("offline");
       }
     }),
   );

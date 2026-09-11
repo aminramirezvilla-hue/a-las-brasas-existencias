@@ -47,13 +47,16 @@ function page(path: string, component: unknown) {
   });
 }
 
+const inventario = InventarioRoute.options.component;
+
 const routeTree = rootRoute.addChildren([
-  page("/", IndexRoute.options.component),
+  page("/", inventario),
+  page("/inventario", inventario),
+  page("/propuesta", IndexRoute.options.component),
   page("/carta", CartaRoute.options.component),
   page("/checklist", ChecklistRoute.options.component),
   page("/conteo", ConteoRoute.options.component),
   page("/expediente", ExpedienteRoute.options.component),
-  page("/inventario", InventarioRoute.options.component),
   page("/kardex", KardexRoute.options.component),
   page("/panel", PanelRoute.options.component),
   page("/recetas", RecetasRoute.options.component),
