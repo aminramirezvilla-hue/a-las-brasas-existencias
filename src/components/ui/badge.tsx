@@ -10,15 +10,15 @@ export function Badge({
 }) {
   const tones = {
     muted: "bg-raised text-muted",
-    ok: "bg-ok/12 text-ok",
-    warn: "bg-warn/12 text-warn",
-    crit: "bg-crit/15 text-crit",
-    ember: "bg-ember/15 text-ember",
+    ok: "bg-ok text-ok-fg",
+    warn: "bg-warn text-warn-fg",
+    crit: "bg-crit text-crit-fg",
+    ember: "bg-ember text-ember-fg",
   };
   return (
     <span
       className={cn(
-        "inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-medium tracking-wide whitespace-nowrap",
+        "inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold tracking-wide whitespace-nowrap",
         tones[tone],
         className,
       )}

@@ -5,7 +5,7 @@ export function Input({ className, ...props }: InputHTMLAttributes<HTMLInputElem
   return (
     <input
       className={cn(
-        "h-11 w-full rounded-md bg-raised px-3 text-sm text-fg shadow-[var(--shadow-border)] placeholder:text-subtle outline-none focus-visible:ring-2 focus-visible:ring-ember/70",
+        "h-12 w-full rounded-md bg-raised px-3 text-base text-fg shadow-[var(--shadow-border)] placeholder:text-subtle outline-none focus-visible:ring-2 focus-visible:ring-ember/70",
         className,
       )}
       {...props}
@@ -20,7 +20,7 @@ export function NativeSelect({
   return (
     <select
       className={cn(
-        "h-11 w-full rounded-md bg-raised px-3 text-sm text-fg shadow-[var(--shadow-border)] outline-none focus-visible:ring-2 focus-visible:ring-ember/70",
+        "h-12 w-full rounded-md bg-raised px-3 text-base text-fg shadow-[var(--shadow-border)] outline-none focus-visible:ring-2 focus-visible:ring-ember/70",
         className,
       )}
       {...props}
@@ -35,7 +35,7 @@ export function Textarea({
   return (
     <textarea
       className={cn(
-        "min-h-24 w-full rounded-md bg-raised px-3 py-2.5 text-sm text-fg shadow-[var(--shadow-border)] placeholder:text-subtle outline-none focus-visible:ring-2 focus-visible:ring-ember/70",
+        "min-h-24 w-full rounded-md bg-raised px-3 py-2.5 text-base text-fg shadow-[var(--shadow-border)] placeholder:text-subtle outline-none focus-visible:ring-2 focus-visible:ring-ember/70",
         className,
       )}
       {...props}

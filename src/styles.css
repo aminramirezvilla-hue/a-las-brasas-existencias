@@ -1,40 +1,46 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+@source "./**/*.{ts,tsx}";
+@source "../spa/**/*.{ts,tsx,html}";
+
 @theme {
   --font-sans: "Barlow", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Oswald", ui-sans-serif, system-ui, sans-serif;
 
-  --color-bg: #0c0b0a;
-  --color-surface: #141210;
-  --color-card: #1a1714;
-  --color-raised: #221c18;
-  --color-fg: #f4efe6;
-  --color-muted: #9a9388;
-  --color-subtle: #6f6a63;
+  --color-bg: #171411;
+  --color-surface: #1e1a16;
+  --color-card: #261f1a;
+  --color-raised: #322a24;
+  --color-fg: #f7f1e6;
+  --color-muted: #c9bfb3;
+  --color-subtle: #a3988c;
   --color-ember: #c41e1e;
   --color-ember-fg: #fff7f2;
-  --color-bone: #f4efe6;
-  --color-border: #2c2824;
-  --color-ok: #4a8a68;
-  --color-warn: #c47a2a;
-  --color-crit: #c43a32;
+  --color-bone: #f7f1e6;
+  --color-border: #4a4138;
+  --color-ok: #2fbe74;
+  --color-ok-fg: #062014;
+  --color-warn: #f0a12a;
+  --color-warn-fg: #1c1204;
+  --color-crit: #ee4d42;
+  --color-crit-fg: #fff6f4;
   --color-ring: #c41e1e;
   --color-flame: #f5c518;
   --color-paper: #f3ede1;
   --color-ink: #1a1410;
   --color-banner: #b42318;
 
-  --color-background: #0c0b0a;
-  --color-foreground: #f4efe6;
+  --color-background: #171411;
+  --color-foreground: #f7f1e6;
   --color-primary: #c41e1e;
   --color-primary-foreground: #fff7f2;
-  --color-secondary: #221c18;
-  --color-secondary-foreground: #f4efe6;
-  --color-destructive: #c43a32;
-  --color-input: #2c2824;
-  --color-accent: #221c18;
-  --color-accent-foreground: #f4efe6;
+  --color-secondary: #322a24;
+  --color-secondary-foreground: #f7f1e6;
+  --color-destructive: #ee4d42;
+  --color-input: #4a4138;
+  --color-accent: #322a24;
+  --color-accent-foreground: #f7f1e6;
 
   --radius-xs: 4px;
   --radius-sm: 8px;
@@ -43,8 +49,8 @@
   --radius-xl: 26px;
   --radius-2xl: 32px;
 
-  --shadow-border: 0 0 0 1px rgb(255 255 255 / 0.08);
-  --shadow-border-hover: 0 0 0 1px rgb(255 255 255 / 0.14);
+  --shadow-border: 0 0 0 1px rgb(255 255 255 / 0.16);
+  --shadow-border-hover: 0 0 0 1px rgb(255 255 255 / 0.28);
 }
 
 @layer base {
@@ -53,6 +59,7 @@
     -moz-osx-font-smoothing: grayscale;
     background: var(--color-bg);
     color: var(--color-fg);
+    font-size: 16px;
   }
 
   body {
@@ -112,6 +119,13 @@
   font-family: var(--font-display);
   letter-spacing: 0.04em;
   text-transform: uppercase;
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }
 
 @media print {

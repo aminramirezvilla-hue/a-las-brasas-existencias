@@ -1,12 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
+import { CategoryChips } from "@/components/category-chips";
 import { AppShell } from "@/components/shell";
 import { SemaforoChip } from "@/components/semaforo-chip";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Input, NativeSelect } from "@/components/ui/input";
-import { CATEGORIES } from "@/lib/catalog";
+import { Input } from "@/components/ui/input";
 import { qty } from "@/lib/format";
 import { stockLevel } from "@/lib/semaforo";
 import { useInventory } from "@/lib/store";
@@ -41,25 +41,12 @@ export function ConteoPage() {
     <AppShell>
       <p className="text-[11px] uppercase tracking-[0.22em] text-ember">Conteo físico</p>
       <h1 className="mt-1 font-display text-3xl text-bone">Cantidad en cámara</h1>
-      <p className="mt-1 max-w-2xl text-sm text-muted">
-        Opcional. Si solo necesitas saber si hay o falta, usa Inventario. Aquí se cuenta lo que hay
-        en cámara cuando sí se quiere un número.
+      <p className="mt-1 max-w-2xl text-base text-muted">
+        Opcional. Si solo necesitas saber si hay o falta, usa Inventario.
       </p>
 
-      <div className="mt-5 flex flex-col gap-2 sm:flex-row sm:items-center">
-        <NativeSelect
-          className="sm:w-56"
-          value={cat}
-          onChange={(e) => setCat(e.target.value as Category | "all")}
-        >
-          <option value="all">Todas</option>
-          {CATEGORIES.map((c) => (
-            <option key={c.id} value={c.id}>
-              {c.label}
-            </option>
-          ))}
-        </NativeSelect>
-        <p className="text-xs text-muted">Empieza por cortes y pollo.</p>
+      <div className="mt-5">
+        <CategoryChips value={cat} onChange={setCat} />
       </div>
 
       <div className="mt-4 space-y-2">
@@ -80,7 +67,7 @@ export function ConteoPage() {
               </div>
               <div className="mt-3 flex items-center gap-2">
                 <Input
-                  className="h-11 max-w-36 tabular"
+                  className="h-14 max-w-40 text-lg tabular"
                   type="number"
                   min="0"
                   step="0.01"
@@ -104,6 +91,8 @@ export function ConteoPage() {
 
       <div className="mt-4 flex flex-wrap items-center gap-3">
         <Button
+          size="lg"
+          className="h-14 px-6 text-base"
           onClick={() => {
             const payload: Record<string, number> = {};
             for (const [id, v] of Object.entries(counts)) {
