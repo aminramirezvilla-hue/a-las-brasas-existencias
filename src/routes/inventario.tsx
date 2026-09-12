@@ -55,13 +55,22 @@ export function InventarioPage() {
     () => ingredients.filter((i) => i.status === "falta"),
     [ingredients],
   );
+  const bajos = useMemo(
+    () => ingredients.filter((i) => i.status === "bajo"),
+    [ingredients],
+  );
 
   const pedidoHref = useMemo(() => {
-    if (faltantes.length === 0) return "";
-    const lines = faltantes.map((i) => `• ${i.name} (${i.unitLabel})`).join("\n");
-    const text = `Pedido A las Brasas — Falta:\n${lines}`;
-    return `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(text)}`;
-  }, [faltantes]);
+    if (faltantes.length === 0 && bajos.length === 0) return "";
+    const parts = ["Pedido A las Brasas"];
+    if (faltantes.length) {
+      parts.push("", "FALTA:", ...faltantes.map((i) => `• ${i.name} (${i.unitLabel})`));
+    }
+    if (bajos.length) {
+      parts.push("", "BAJO:", ...bajos.map((i) => `• ${i.name} (${i.unitLabel})`));
+    }
+    return `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(parts.join("\n"))}`;
+  }, [faltantes, bajos]);
 
   return (
     <AppShell>
@@ -114,17 +123,35 @@ export function InventarioPage() {
         <CategoryChips value={cat} onChange={setCat} />
       </div>
 
-      {faltantes.length > 0 && filter !== "hay" ? (
-        <Card className="mt-4 bg-crit p-4 text-crit-fg shadow-none">
-          <p className="text-xs font-semibold uppercase tracking-widest">Pedir ahora</p>
-          <ul className="mt-2 space-y-1 text-base">
-            {faltantes.map((i) => (
-              <li key={i.id} className="flex items-center justify-between gap-2">
-                <span className="font-semibold">{i.name}</span>
-                <span className="text-sm opacity-80">{i.unitLabel}</span>
-              </li>
-            ))}
-          </ul>
+      {(faltantes.length > 0 || bajos.length > 0) && filter !== "hay" ? (
+        <Card className="mt-4 bg-card p-4 text-fg shadow-[var(--shadow-border)]">
+          <p className="text-xs font-semibold uppercase tracking-widest text-ember">Pedir ahora</p>
+          {faltantes.length > 0 ? (
+            <div className="mt-3">
+              <p className="text-xs font-semibold uppercase tracking-widest text-crit">Falta</p>
+              <ul className="mt-1 space-y-1 text-base">
+                {faltantes.map((i) => (
+                  <li key={i.id} className="flex items-center justify-between gap-2">
+                    <span className="font-semibold">{i.name}</span>
+                    <span className="text-sm opacity-80">{i.unitLabel}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
+          {bajos.length > 0 ? (
+            <div className="mt-3">
+              <p className="text-xs font-semibold uppercase tracking-widest text-warn">Bajo</p>
+              <ul className="mt-1 space-y-1 text-base">
+                {bajos.map((i) => (
+                  <li key={i.id} className="flex items-center justify-between gap-2">
+                    <span className="font-semibold">{i.name}</span>
+                    <span className="text-sm opacity-80">{i.unitLabel}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
           <Button asChild className="mt-4 h-14 w-full bg-bone text-ink hover:opacity-95">
             <a href={pedidoHref} target="_blank" rel="noreferrer">
               Pedir por WhatsApp
